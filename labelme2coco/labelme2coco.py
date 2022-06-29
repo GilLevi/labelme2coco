@@ -3,8 +3,8 @@ from typing import List
 
 import numpy as np
 from PIL import Image
-from sahi.utils.coco import Coco, CocoAnnotation, CocoCategory, CocoImage
-from sahi.utils.file import list_files_recursively, load_json, save_json
+from labelme2coco.coco_utils import Coco, CocoAnnotation, CocoCategory, CocoImage
+from labelme2coco.utils import list_files_recursively, load_json, save_json
 from tqdm import tqdm
 
 

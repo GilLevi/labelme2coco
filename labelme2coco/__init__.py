@@ -6,9 +6,9 @@ import logging
 import os
 from pathlib import Path
 
-from sahi.utils.file import save_json
 
 from labelme2coco.labelme2coco import get_coco_from_labelme_folder
+from labelme2coco.utils import save_json
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
