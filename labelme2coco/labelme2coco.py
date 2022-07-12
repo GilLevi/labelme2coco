@@ -74,8 +74,12 @@ def get_coco_from_labelme_folder(
                 )
             elif shape["shape_type"] == "polygon":
                 segmentation = [np.asarray(shape["points"]).flatten().tolist()]
+                # Gil hard coded added our keypoints data
+                keypoints = [[segmentation[0][2*i], segmentation[0][2*i+1], 2] for i in [0, 1, 2]]
+                keypoints = [np.asarray(keypoints).astype(int).flatten().tolist()]
                 coco_annotation = CocoAnnotation(
                     segmentation=segmentation,
+                    keypoints=keypoints,
                     category_id=category_id,
                     category_name=category_name,
                 )

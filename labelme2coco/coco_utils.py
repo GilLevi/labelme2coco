@@ -957,6 +957,7 @@ class CocoAnnotation:
     def __init__(
         self,
         segmentation=None,
+        keypoints=None,
         bbox=None,
         category_id=None,
         category_name=None,
@@ -965,8 +966,10 @@ class CocoAnnotation:
     ):
         """
         Creates coco annotation object using bbox or segmentation
-
+        keypoints format: [x y v x y v x y v] where v is visible (0 none, 1 labeled but not visibile, 2 labeled and visible)
         Args:
+            keypoints: List[List]
+                [[121, 263, 2, 121, 350, 2, 448, 312, 2]]
             segmentation: List[List]
                 [[1, 1, 325, 125, 250, 200, 5, 200]]
             bbox: List
@@ -983,6 +986,7 @@ class CocoAnnotation:
         if bbox is None and segmentation is None:
             raise ValueError("you must provide a bbox or polygon")
 
+        self._keypoints = keypoints
         self._segmentation = segmentation
         bbox = [round(point) for point in bbox] if bbox else bbox
         self._category_id = category_id
@@ -1019,6 +1023,13 @@ class CocoAnnotation:
         Returns coco formatted bbox of the annotation as [xmin, ymin, width, height]
         """
         return self._shapely_annotation.to_coco_bbox()
+
+    @property
+    def keypoints(self):
+        """
+        Return coco formatted keypoints of the annotation as [[121, 263, 2, 121, 350, 2, 448, 312, 2]]
+        """
+        return self._keypoints
 
     @property
     def segmentation(self):
@@ -1082,6 +1093,7 @@ class CocoAnnotation:
             "image_id": self.image_id,
             "bbox": self.bbox,
             "category_id": self.category_id,
+            "keypoints": self.keypoints,
             "segmentation": self.segmentation,
             "iscrowd": self.iscrowd,
             "area": self.area,
@@ -1094,6 +1106,7 @@ class CocoAnnotation:
         return f"""CocoAnnotation<
     image_id: {self.image_id},
     bbox: {self.bbox},
+    keypoints: {self.keypoints},
     segmentation: {self.segmentation},
     category_id: {self.category_id},
     category_name: {self.category_name},
@@ -1164,6 +1177,7 @@ def create_coco_dict(images, categories, ignore_negative_samples=False, image_id
                     "iscrowd": 0,
                     "image_id": image_id,
                     "bbox": coco_annotation.bbox,
+                    "keypoints": coco_annotation.keypoints,
                     "segmentation": coco_annotation.segmentation,
                     "category_id": coco_annotation.category_id,
                     "id": annotation_id,
