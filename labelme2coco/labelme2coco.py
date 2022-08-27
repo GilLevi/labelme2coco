@@ -80,7 +80,8 @@ def get_coco_from_labelme_folder(
                 coco_annotation = CocoAnnotation(
                     segmentation=segmentation,
                     keypoints=keypoints,
-                    category_id=category_id,
+                    #category_id=category_id,
+                    category_id=1,
                     category_name=category_name,
                 )
             else:
